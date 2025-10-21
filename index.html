@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Halloween Leo XIII</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Comic Sans MS', cursive;
+    background: radial-gradient(circle at top, #1a0f00 0%, #000 100%);
+    overflow: hidden;
+    color: #fff3e0;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    position: relative;
+    z-index: 5;
+    transition: filter 0.5s ease;
+  }
+
+  .blurred {
+    filter: blur(6px) brightness(0.5);
+  }
+
+  h1 {
+    color: orange;
+    font-size: 3em;
+    text-shadow: 0 0 10px #ff9800, 0 0 20px #ff6600;
+    margin-bottom: 30px;
+  }
+
+  .progress-container {
+    width: 80%;
+    height: 40px;
+    background-color: #3b1f00;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 0 20px orange;
+    margin-bottom: 30px;
+  }
+
+  .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff6600, #ffcc00);
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #000;
+    font-size: 1.2em;
+    transition: width 1s ease-in-out;
+    animation: glow 2s infinite alternate;
+  }
+
+  @keyframes glow {
+    0% { box-shadow: 0 0 10px #ff6600; }
+    100% { box-shadow: 0 0 25px #ffcc00; }
+  }
+
+  .class-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 700px;
+    gap: 15px;
+  }
+
+  .class-item {
+    background-color: #ff9800;
+    color: black;
+    font-weight: bold;
+    border-radius: 15px;
+    padding: 15px 25px;
+    cursor: pointer;
+    font-size: 1.5em;
+    transition: transform 0.2s, background-color 0.3s;
+    text-transform: uppercase;
+  }
+
+  .class-item:hover {
+    transform: scale(1.1);
+    background-color: #ffa726;
+  }
+
+  .checked {
+    background-color: #4caf50 !important;
+    color: white;
+    text-decoration: line-through;
+  }
+
+  #message {
+    margin-top: 50px;
+    font-size: 5em;
+    display: none;
+    text-align: center;
+    background: linear-gradient(90deg, orange, red, yellow, orange);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glowText 2s infinite alternate, riseUp 1s ease-out forwards;
+    text-shadow: 0 0 10px #ff6600, 0 0 20px #ff3300, 0 0 30px #ff0000;
+    position: relative;
+    z-index: 10;
+  }
+
+  @keyframes glowText {
+    0%, 100% { text-shadow: 0 0 10px #ff6600, 0 0 20px #ff3300, 0 0 30px #ff0000; }
+    50% { text-shadow: 0 0 25px #ff9900, 0 0 35px #ff6600, 0 0 45px #ff3300; }
+  }
+
+  @keyframes riseUp {
+    0% { transform: translateY(50px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+
+  /* Felicitatiebericht */
+  #final-text {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2em;
+    color: #fff3e0;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 25px 35px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 800px;
+    box-shadow: 0 0 40px rgba(255, 140, 0, 0.6);
+    z-index: 60;
+    animation: fadeIn 1.5s ease-in forwards;
+    line-height: 1.4;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translate(-50%, -40%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
+  }
+
+  /* Decoraties */
+  .decor {
+    position: absolute;
+    font-size: 80px;
+    opacity: 0.9;
+    animation: float linear infinite;
+    z-index: 2;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0);}
+    50% { transform: translateY(-30px);}
+    100% { transform: translateY(0);}
+  }
+
+  .decor.large { font-size: 90px; }
+  .decor.medium { font-size: 60px; }
+  .decor.small { font-size: 40px; }
+
+  .falling {
+    position: absolute;
+    animation: fall linear infinite;
+    z-index: 1;
+    opacity: 0.8;
+  }
+
+  @keyframes fall {
+    0% { transform: translateY(-50px) rotate(0deg); opacity:1; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity:0; }
+  }
+
+  .glow-border {
+    position: fixed;
+    inset: 0;
+    box-shadow: 0 0 80px 20px rgba(255, 140, 0, 0.3) inset;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .confetti {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    font-size: 40px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 0;
+    animation: explode 2.5s ease-out forwards;
+    z-index: 100;
+  }
+
+  @keyframes explode {
+    0% { transform: translate(-50%, -50%) scale(0.3); opacity: 1; }
+    100% { transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1.2) rotate(720deg); opacity: 0; }
+  }
+
+</style>
+</head>
+<body>
+
+  <!-- Achtergronddecoratie -->
+  <div class="decor large" style="top:5%; left:10%;">🦇</div>
+  <div class="decor medium" style="top:15%; right:20%;">🦇</div>
+  <div class="decor small" style="top:20%; left:50%;">🕸️</div>
+  <div class="decor large" style="bottom:10%; left:20%;">🎃</div>
+  <div class="decor medium" style="bottom:15%; right:15%;">👻</div>
+  <div class="decor small" style="top:50%; left:30%;">🕷️</div>
+  <div class="decor small" style="top:70%; right:40%;">🦇</div>
+
+  <!-- Vallende items -->
+  <div class="falling" style="left:5%; font-size:50px; animation-duration:12s;">🍂</div>
+  <div class="falling" style="left:20%; font-size:60px; animation-duration:15s;">🎃</div>
+  <div class="falling" style="left:35%; font-size:40px; animation-duration:10s;">👻</div>
+  <div class="falling" style="left:50%; font-size:50px; animation-duration:14s;">🦇</div>
+  <div class="falling" style="left:65%; font-size:40px; animation-duration:12s;">🕸️</div>
+  <div class="falling" style="left:80%; font-size:60px; animation-duration:16s;">🍁</div>
+  <div class="falling" style="left:90%; font-size:50px; animation-duration:13s;">🕷️</div>
+
+  <div class="glow-border"></div>
+
+  <div class="container" id="main-container">
+    <h1>Halloween Leo XIII</h1>
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar">0%</div>
+    </div>
+    <div class="class-list" id="class-list">
+      <div class="class-item">1A</div>
+      <div class="class-item">1B</div>
+      <div class="class-item">2A</div>
+      <div class="class-item">2B</div>
+      <div class="class-item">3A</div>
+      <div class="class-item">3B</div>
+      <div class="class-item">4A</div>
+      <div class="class-item">4B</div>
+      <div class="class-item">5A</div>
+      <div class="class-item">5B</div>
+      <div class="class-item">6A</div>
+      <div class="class-item">6B</div>
+    </div>
+    <div id="message">🎃 Happy Halloween! 👻</div>
+  </div>
+
+  <div id="final-text">
+    🎉 Wat geweldig gedaan! 🎃<br>
+    Jullie hebben alle opdrachten tot een goed einde gebracht! 👻 Wat een teamwerk en enthousiasme! 🕷️<br><br>
+    Voor al dat harde werk krijgen jullie natuurlijk iets lekkers... 🍬<br>
+    Maar nog héél even geduld, want dat komt pas deze namiddag! ⏰🎃<br><br>
+    Geniet van jullie verdiende beloning en een spookachtig fijne Halloween! 🦇👻🎃
+  </div>
+
+<script>
+  const progressBar = document.getElementById("progress-bar");
+  const classItems = document.querySelectorAll(".class-item");
+  const message = document.getElementById("message");
+  const finalText = document.getElementById("final-text");
+  const container = document.getElementById("main-container");
+
+  function updateProgress() {
+    const total = classItems.length;
+    const done = document.querySelectorAll(".checked").length;
+    const percent = Math.round((done / total) * 100);
+    progressBar.style.width = percent + "%";
+    progressBar.textContent = percent + "%";
+
+    if (percent === 100) {
+      message.style.display = "block";
+      triggerConfetti();
+
+      // Happy Halloween 6 seconden zichtbaar
+      setTimeout(() => { message.style.display = "none"; }, 6000);
+
+      // Toon felicitatiebericht 5 seconden later
+      setTimeout(() => { showFinalText(); }, 5000);
+
+    } else {
+      message.style.display = "none";
+      finalText.style.display = "none";
+      container.classList.remove("blurred");
+    }
+  }
+
+  classItems.forEach(item => {
+    item.addEventListener("click", () => {
+      item.classList.toggle("checked");
+      updateProgress();
+    });
+  });
+
+  // 🎃 Confetti
+  function triggerConfetti() {
+    const icons = ["🎃", "🦇", "👻", "🕸️", "🕷️"];
+    for (let i = 0; i < 40; i++) {
+      const confetti = document.createElement("div");
+      confetti.classList.add("confetti");
+      confetti.textContent = icons[Math.floor(Math.random() * icons.length)];
+      confetti.style.setProperty("--x", `${Math.random() * 800 - 400}px`);
+      confetti.style.setProperty("--y", `${Math.random() * 600 - 300}px`);
+      confetti.style.fontSize = `${30 + Math.random() * 40}px`;
+      confetti.style.animationDuration = `${1.5 + Math.random() * 1.5}s`;
+      document.body.appendChild(confetti);
+      setTimeout(() => confetti.remove(), 2500);
+    }
+  }
+
+  function showFinalText() {
+    container.classList.add("blurred");
+    finalText.style.display = "block";
+  }
+</script>
+</body>
+</html>
